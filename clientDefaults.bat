@@ -1,0 +1,1 @@
+python client.py --server 192.168.1.143 --monitor 1
