@@ -4,6 +4,7 @@
 import sys
 import argparse
 import colorsys
+import requests
 from mss import mss
 
 def parse_args(args):
@@ -14,7 +15,12 @@ def parse_args(args):
 	return parser.parse_args(args)
 
 def main_loop(args):
-	print "Connecting to {} on monitor {} with {} zones.".format(args.server, args.monitor, args.zones)
+	print("Connecting to {} on monitor {}.".format(args.server, args.monitor))
+	response = requests.get("http://{}/".format(args.server))
+	if response.status_code != 200:
+		print("Couldn't connect to server.", timeout=1)
+		exit()
+	print("Connected to server.")
 
 	while True:
 		pass
