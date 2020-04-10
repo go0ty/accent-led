@@ -14,17 +14,18 @@ def init_led(numPixels):
 	strip.setBrightness(32)
 	return strip
 
-led_count = 72
-strip = init_led(led_count)
+num_pixels = 72
+strip = init_led(num_pixels)
 
 app = Flask(__name__)
 
 @app.route('/')
 def healthCheck():
-	return 'Up.'
+	return 'OK'
 
 @app.route('/color/<string:color>', methods=['PUT'])
 def changeColor(color):
-	for x in range(led_count):
-		strip.setPixelColor(x, int(color), 16)
-	return flask.Response(status=200)
+	for x in range(num_pixels):
+		strip.setPixelColor(x, int(color, 16))
+	strip.show()
+	return 'OK'
