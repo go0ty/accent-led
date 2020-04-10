@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #
 # Server that handles color requests from the clients.
+#
 import sys
 import argparse
 import colorsys
@@ -21,10 +22,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def healthCheck():
+	# Health check
 	return 'OK'
 
 @app.route('/color/<string:color>', methods=['PUT'])
 def changeColor(color):
+	# Set every LED of the strip to a single color
 	for x in range(num_pixels):
 		strip.setPixelColor(x, int(color, 16))
 	strip.show()
