@@ -77,7 +77,7 @@ def main_loop(args):
 
 	while True:
 		# Get Monitor Image
-		image = get_monitor_image(sct, displays, args.monitor)
+		image = get_monitor_image(sct, displays, int(args.monitor))
 		# Resize the Image
 		image = cv2.resize(image, (40, 40), interpolation = cv2.INTER_AREA)
 		# Reshape the Image
@@ -103,7 +103,6 @@ def main_loop(args):
 		# Send to the API
 		try:
 			response = requests.put("http://{}/color/{}".format(args.server, hex), timeout=1)
-			print("OK")
 		except:
 			print("Failed to print color {}".format(hex))
 
