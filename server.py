@@ -43,16 +43,21 @@ def background_hue_chase():
 				time.sleep(pause)
 				continue
 
+			# Get the three values on the Hue line (two extending, one actual)
+			# to determine the fastest path to the target hue.
 			target_hue_spread = [target_hue - 360, target_hue, target_hue + 360]
 			closest_hue_index = None
+			best_difference = None
 
 			for index, target_hue_point in enumerate(target_hue_spread):
 				difference = abs(target_hue_point - current_hue)
-				if closest_hue_index is None:
+				if best_difference is None:
 					closest_hue_index = index
+					best_difference = difference
 				else:
-					if difference < target_hue_spread[closest_hue_index]:
+					if difference < best_difference:
 						closest_hue_index = index
+						best_difference = difference
 
 			closest_target_hue = target_hue_spread[closest_hue_index]
 
