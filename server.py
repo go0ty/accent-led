@@ -108,11 +108,3 @@ def change_targe_hue(color):
 	global target_hue
 	target_hue = color
 	return 'OK'
-
-@app.route('/color/<string:color>', methods=['PUT'])
-def change_color(color):
-	# Set every LED of the strip to a single color
-	for x in range(num_pixels):
-		strip.setPixelColor(x, int(color, 16))
-	strip.show()
-	return 'OK'
