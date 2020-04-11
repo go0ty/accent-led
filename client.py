@@ -54,13 +54,9 @@ def find_best_color(cluster_centers, label_counts):
 		# If everything is greyscale, then let the most common cluster through.
 		return cluster_centers[label_counts.most_common(1)[0][0]]
 
-def boost_rgb(red, green, blue):
+def get_boosted_hue(red, green, blue):
 	hls = colorsys.rgb_to_hls(red, green, blue)
-	boost_saturation = colorsys.hls_to_rgb(hls[0], 0.5, 1.0)
-	red = float(boost_saturation[0]) * 255
-	green = float(boost_saturation[1]) * 255
-	blue = float(boost_saturation[2]) * 255
-	return red, green, blue
+	return hls[0]
 
 def main_loop(args):
 	# Health Check
@@ -96,15 +92,13 @@ def main_loop(args):
 		red = float(color_list[2])/255
 
 		# Convert to HLS and boost values a bit
-		red, green, blue = boost_rgb(red, green, blue)
+		boosted_hue = get_boosted_hue(red, green, blue)
 
-		# Back to RGB Hex
-		hex = '%02x%02x%02x' % (int(green), int(red), int(blue))
 		# Send to the API
 		try:
-			response = requests.put("http://{}/color/{}".format(args.server, hex), timeout=1)
+			response = requests.put("http://{}/hue/{}".format(args.server, int(boosted_hue*360)), timeout=1)
 		except:
-			print("Failed to print color {}".format(hex))
+			print("Failed to print color {}".format(boosted_hue))
 
 if __name__ == "__main__":
 	# Parse Arguments
