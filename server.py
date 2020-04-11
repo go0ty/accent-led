@@ -27,8 +27,8 @@ def background_hue_chase():
 	global current_hue
 	global target_hue
 	global num_pixels
-	step = 3
-	pause = 0.03
+	step = 10
+	pause = 0.02
 
 	while True:
 		# If there's no Target, then do nothing.
