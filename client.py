@@ -83,7 +83,7 @@ def main_loop(args):
 		# Reshape the Image
 		image = image.reshape((image.shape[0] * image.shape[1], 3))
 		# Cluster
-		clusters = KMeans(n_clusters = args.clusters)
+		clusters = KMeans(n_clusters = args.clusters, max_iter = 10)
 		labels = clusters.fit_predict(image)
 		label_counts = Counter(labels)
 
