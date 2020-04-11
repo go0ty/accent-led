@@ -93,6 +93,7 @@ def background_hue_chase():
 
 # Start the Hue Thread
 hue_chase_thread = threading.Thread(name='hue_chase', target=background_hue_chase)
+hue_chase_thread.daemon = True
 hue_chase_thread.start()
 
 # Flask
