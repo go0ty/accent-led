@@ -72,33 +72,33 @@ def main_loop(args):
 	displays = sct.enum_display_monitors()
 
 	while True:
-		# Get Monitor Image
-		image = get_monitor_image(sct, displays, int(args.monitor))
-		# Resize the Image
-		image = cv2.resize(image, (40, 40), interpolation = cv2.INTER_AREA)
-		# Reshape the Image
-		image = image.reshape((image.shape[0] * image.shape[1], 3))
-		# Cluster
-		clusters = KMeans(n_clusters = args.clusters, max_iter = 10)
-		labels = clusters.fit_predict(image)
-		label_counts = Counter(labels)
-
-		# Get the Dominant Color
-		dominant_color = find_best_color(clusters.cluster_centers_, label_counts)
-		color_list = list(dominant_color)
-		# Separate the RGB Values, scale 0-1
-		blue = float(color_list[0])/255
-		green = float(color_list[1])/255
-		red = float(color_list[2])/255
-
-		# Convert to HLS and boost values a bit
-		boosted_hue = get_boosted_hue(red, green, blue)
-
-		# Send to the API
 		try:
-			response = requests.put("http://{}/hue/{}".format(args.server, int(boosted_hue*360)), timeout=1)
+			# Get Monitor Image
+			image = get_monitor_image(sct, displays, int(args.monitor))
+			# Resize the Image
+			image = cv2.resize(image, (40, 40), interpolation = cv2.INTER_AREA)
+			# Reshape the Image
+			image = image.reshape((image.shape[0] * image.shape[1], 3))
+			# Cluster
+			clusters = KMeans(n_clusters = args.clusters, max_iter = 10)
+			labels = clusters.fit_predict(image)
+			label_counts = Counter(labels)
+
+			# Get the Dominant Color
+			dominant_color = find_best_color(clusters.cluster_centers_, label_counts)
+			color_list = list(dominant_color)
+			# Separate the RGB Values, scale 0-1
+			blue = float(color_list[0])/255
+			green = float(color_list[1])/255
+			red = float(color_list[2])/255
+
+			# Convert to HLS and boost values a bit
+			boosted_hue = get_boosted_hue(red, green, blue)
+
+			# Send to the API
+			requests.put("http://{}/hue/{}".format(args.server, int(boosted_hue*360)), timeout=1)
 		except:
-			print("Failed to print color {}".format(boosted_hue))
+			print("Iteration Failed")
 
 if __name__ == "__main__":
 	# Parse Arguments
