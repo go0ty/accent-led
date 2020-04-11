@@ -27,7 +27,7 @@ def background_hue_chase():
 	global current_hue
 	global target_hue
 	global num_pixels
-	step = 1
+	step = 3
 	pause = 0.03
 
 	while True:
@@ -38,6 +38,11 @@ def background_hue_chase():
 
 		# Update the current Hue
 		if current_hue is not None:
+			# If the hues are within the step, then pass to the next iteration.
+			if abs(target_hue - current_hue) <= step:
+				time.sleep(pause)
+				continue
+
 			target_hue_spread = [target_hue - 360, target_hue, target_hue + 360]
 			closest_hue_index = None
 
@@ -66,7 +71,7 @@ def background_hue_chase():
 			current_hue = current_hue + 360
 
 		# Set the Hex for the HSL
-		rgb = colorsys.hls_to_rgb(current_hue, 0.5, 1.0)
+		rgb = colorsys.hls_to_rgb(float(current_hue)/360, 0.5, 1.0)
 		red = float(rgb[0]) * 255
 		green = float(rgb[1]) * 255
 		blue = float(rgb[2]) * 255
